@@ -8,7 +8,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class DBConnect {
 
-	private static final String jdbcURL = "jdbc:mysql://localhost/food_pyramid_mod";
+	private static final String jdbcURL = "jdbc:mariadb://localhost/food_pyramid_mod";
 	private static HikariDataSource ds;
 	
 	public static Connection getConnection() {
@@ -17,7 +17,7 @@ public class DBConnect {
 			HikariConfig config = new HikariConfig();
 			config.setJdbcUrl(jdbcURL);
 			config.setUsername("root");
-			config.setPassword("");
+			config.setPassword("12Marco1998");
 			
 			// configurazione MySQL
 			config.addDataSourceProperty("cachePrepStmts", "true");

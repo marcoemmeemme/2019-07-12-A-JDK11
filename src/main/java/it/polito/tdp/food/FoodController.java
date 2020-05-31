@@ -5,8 +5,11 @@
 package it.polito.tdp.food;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.food.model.Food;
+import it.polito.tdp.food.model.FoodCouple;
 import it.polito.tdp.food.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,7 +44,7 @@ public class FoodController {
     private Button btnSimula; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxFood"
-    private ComboBox<?> boxFood; // Value injected by FXMLLoader
+    private ComboBox<Food> boxFood; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtResult"
     private TextArea txtResult; // Value injected by FXMLLoader
@@ -49,13 +52,36 @@ public class FoodController {
     @FXML
     void doCreaGrafo(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Creazione grafo...");
+    	txtResult.appendText("Creazione grafo...\n");
+    	try
+    	{
+    		int quantita=Integer.parseInt(this.txtPorzioni.getText());
+    		if(quantita>=1)
+    		{
+    			this.boxFood.getItems().addAll(model.getFood(quantita));
+    			txtResult.setText(this.model.creaGrafo(quantita)+"\n");
+    			for(FoodCouple c:this.model.getCouple())
+    			{
+    				txtResult.appendText(c.toString()+"\n");
+    			}
+    			
+    		}
+    	}
+    	catch(NumberFormatException nfe)
+    	{
+    		this.txtResult.setText("Inserire un numero intero!");
+    	}
     }
     
     @FXML
     void doCalorie(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Analisi calorie...");
+    	txtResult.appendText("Analisi calorie...\n");
+    	List<FoodCouple> list=this.model.topFive(this.boxFood.getValue());
+    	for(FoodCouple c:list)
+    	{
+    		txtResult.appendText("Cibo: "+c.getF2().getDisplay_name()+", totale calorie: "+c.getMediaCalories()+"\n");
+    	}
     }
 
     @FXML
@@ -63,7 +89,7 @@ public class FoodController {
     	txtResult.clear();
     	txtResult.appendText("Simulazione...");
     }
-
+    
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert txtPorzioni != null : "fx:id=\"txtPorzioni\" was not injected: check your FXML file 'Food.fxml'.";
